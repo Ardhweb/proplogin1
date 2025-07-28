@@ -1,5 +1,5 @@
 from rest_framework.permissions import AllowAny,IsAuthenticated
-from account.api.serializers import UserRegisterSerializer,LoginSerializer
+from account.api.serializers import UserSerializer,LoginSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
@@ -7,13 +7,14 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
-
+from firm.models import Organization
+from django.shortcuts import get_object_or_404
 
 class UserRegisterView(APIView):
     http_method_names = ['post']
     permission_classes = [AllowAny]
-    #authentication_classes = [] # disables  authentication user have to exists in our system
-    serializer_class = UserRegisterSerializer
+    authentication_classes = [] # disables  authentication user have to exists in our system
+    serializer_class = UserSerializer
     
 
     def post(self, request, *args, **kwargs):
@@ -23,6 +24,31 @@ class UserRegisterView(APIView):
         return Response({
             "user":serializer.data,
         },status=status.HTTP_201_CREATED)
+    
+class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication, )
+    serializer_class = UserSerializer
+    
+    def get(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        serializer = self.serializer_class(user)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        serializer = self.serializer_class(user, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        user.delete()
+        return Response({"message":"user have deleted"},status=status.HTTP_204_NO_CONTENT)
+    
+
 
 
 
