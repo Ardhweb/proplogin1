@@ -1,11 +1,12 @@
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework import viewsets
-from account.api.serializers import UserSerializer ,UserRegisterSerializer
+from account.api.serializers import UserSerializer ,UserRegisterSerializer,LoginSerializer
 from django.contrib.auth.models import User
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
+from rest_framework_simplejwt.exceptions import TokenError,InvalidToken
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -33,7 +34,7 @@ class UserRegisterViewSet(viewsets.ViewSet):
     '''
     authentication: Bearer Token
     '''
-    http_method_names = ('post')
+    http_method_names = ['post']
     permission_classes = (AllowAny,)
     authentication_classes = [] # disables JWT or any auth cause for authentication user have to exdists in our system
     serializer_class = UserRegisterSerializer
@@ -56,3 +57,20 @@ class UserRegisterViewSet(viewsets.ViewSet):
             "refresh":res["refresh"],
             "token":res["access"]
         },status=status.HTTP_201_CREATED)
+
+
+class LoginViewSet(viewsets.ViewSet):
+    http_method_name = ['post']
+    serializer_class = LoginSerializer
+    permission_classes = (AllowAny,)
+    # authentication_classes = []
+   
+
+    def create(self,request,*args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except TokenError as e:
+            raise InvalidToken(e.args[0])
+        
+        return Response(serializer.validate_data,status=status.HTTP_200_OK)
