@@ -5,10 +5,12 @@ from firm.api.serializers import OrganizationSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.exceptions import NotFound
+from rest_framework.authentication import TokenAuthentication
 
 class OrganizationViewSet(viewsets.ModelViewSet):
     serializer_class = OrganizationSerializer
     permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
 
     def list(self,request):
         serializer = self.serializer_class(data=request.data)
@@ -24,32 +26,21 @@ class OrganizationViewSet(viewsets.ModelViewSet):
             )
         
     def retrieve(self, request, *args, **kwargs):
-        if request.user.is_authenticated:
             try:
-                obj = Organization.objects.get(pk=kwargs.get('pk'), user=request.user)
+                obj = Organization.objects.get(pk=kwargs.get('pk'), user=self.request.user)
             except Organization.DoesNotExist:
-                raise NotFound("Book not found or you don't have permission to view it.")
+                raise NotFound("Firm not found.")
             
             serializer = self.get_serializer(obj)
-            serializer.is_valid(raise_exception=True)
             return Response({"data": serializer.data}, status=status.HTTP_200_OK)
-        else:
-            return Response(
-                {"error": "Authentication required to get firm list associted with you."},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+       
+            
         
 
     def perform_create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.save(user=self.request.user)
+        return Response({"data": serializer.data}, status=status.HTTP_201_CREATED)
     
-        if request.user.is_authenticated:
-            serializer.save(user=request.user)
-            return Response({"data": serializer.data}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(
-                {"error": "Authentication required to create a new firm."},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
         

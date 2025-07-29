@@ -7,7 +7,6 @@ from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rest_framework.views import APIView
 from rest_framework.authentication import TokenAuthentication
-from firm.models import Organization
 from django.shortcuts import get_object_or_404
 
 class UserRegisterView(APIView):
@@ -42,6 +41,15 @@ class UserDetailView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        serializer = self.serializer_class(user, data=request.data, partial=True)  # partial=True allows partial updates
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
     def delete(self, request, pk):
         user = get_object_or_404(User, pk=pk)
