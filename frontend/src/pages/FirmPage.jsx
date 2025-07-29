@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { AddForm } from "../components/FirmForm";
+import { Button } from 'react-bootstrap';
 
 function Firm() {
+  const [showModal, setShowModal] = useState(false);
   const [firmData, setfirmData] = useState([]);
   const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const authRaw = localStorage.getItem("auth");
+const authRaw = localStorage.getItem("auth");
     if (!authRaw) {
       setError("User not authenticated");
       return;
@@ -25,7 +26,7 @@ function Firm() {
           headers: {
             Accept: "application/json",
             "Content-Type": "application/json",
-            Authorization: `Token ${token}`, // Use template string properly here
+            Authorization: `Token ${token}`, 
           },
         });
 
@@ -42,26 +43,51 @@ function Firm() {
       }
     };
 
+  useEffect(() => {
+    
     fetchFirms();
   }, []);
 
   return (
-    <div className="container mt-4">
+    <div   className="container mt-4">
       <h2>My Firm</h2>
-      {error && <div className="alert alert-danger">{error}</div>}
-      <div className="row">
-        {/* {firmData.length === 0 && !error && <p>No firm data available.</p>} */}
+       <Button variant="primary" onClick={() => setShowModal(true)}>
+        Add new firm
+      </Button>
 
+      <AddForm
+        show={showModal}
+        handleClose={() => setShowModal(false)} onSuccess={fetchFirms}
+      />
+      {error && <div   className="alert alert-danger">{error}</div>}
+     
+        {firmData.length === 0 && !error && <p>No firm data available.</p>}
+<div   className="row ">
         {firmData.map((firm, index) => (
-          <div className="col-md-4" key={index}>
-            <div className="card mb-4">
-              <div className="card-body">
-                <h5 className="card-title">{firm.firm_name}</h5>
+           
+          <div   className="col-md-4" key={index}>
+            <div   className="card mb-4">
+              <div   className="card-body">
+                <h5   className="card-title">{firm.firm_name}</h5>
               </div>
+
+             
+  <ul className="list-group list-group-flush ">
+    <li className="list-group-item">Tax Id: {firm.tax_id}</li>
+    <li className="list-group-item">GSTIN: {firm.gstin}</li>
+     <li className="list-group-item">Phone: {firm.phone}</li>
+     <li className="list-group-item">Email: {firm.email||'No Email details'}</li>
+      <li className="list-group-item">Address : {firm.address}</li>
+         <li className="list-group-item">Country: {firm.country}</li>
+     <li className="list-group-item">City: {firm.city}</li>
+  </ul>
+
             </div>
           </div>
+
+
         ))}
-      </div>
+              </div>
     </div>
   );
 }

@@ -26,6 +26,7 @@ function LoginForm() {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
+           Authorization: `Token ${token}`, 
         },
         body: JSON.stringify({
           username: fieldData.username,
@@ -45,7 +46,7 @@ function LoginForm() {
             user: data.user,
           })
         );
-        navigate("/");
+        navigate("/myfirm");
       } else {
         alert("Error: " + data.message);
       }

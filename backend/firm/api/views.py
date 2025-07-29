@@ -30,8 +30,6 @@ class OrganizationViewSet(viewsets.ModelViewSet):
             serializer = self.get_serializer(obj)
             return Response({"data": serializer.data}, status=status.HTTP_200_OK)
        
-            
-        
 
     def perform_create(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
