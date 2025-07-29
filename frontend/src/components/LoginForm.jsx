@@ -26,7 +26,7 @@ function LoginForm() {
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
-           Authorization: `Token ${token}`, 
+          
         },
         body: JSON.stringify({
           username: fieldData.username,
