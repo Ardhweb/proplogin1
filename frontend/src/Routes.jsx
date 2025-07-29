@@ -41,8 +41,16 @@ export const Routing = () => {
       </Route>
 
       {/* Proteacted Routes */}
-      <Route element={<ProtectedRoute />}>
+      {/* <Route element={<ProtectedRoute />}>
         <Route path="/myfirm" element={<Firm />} />
+      </Route> */}
+
+       <Route element={<ProtectedRoute />}>
+        {/* Inside ProtectedRoute, add layout for protected pages */}
+        <Route element={<PublicLayout />}>
+          <Route path="/myfirm" element={<Firm />} />
+          {/* Add more protected routes here */}
+        </Route>
       </Route>
 
       <Route path="*" element={<Missing />} />

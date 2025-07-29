@@ -1,4 +1,4 @@
-from  account.api.views import UserRegisterView,LoginView,UserDetailView
+from  account.api.views import UserRegisterView,LoginView,UserDetailView,LogoutView
 from firm.api.views import OrganizationViewSet
 from django.urls import path
 from rest_framework.routers import SimpleRouter
@@ -6,7 +6,8 @@ from rest_framework.routers import SimpleRouter
 urlpatterns = [
     path('user/register/',UserRegisterView.as_view(),name="user-register"),
     path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
-    path('login/',LoginView.as_view(),name="user-login")
+    path('login/',LoginView.as_view(),name="user-login"),
+    path('logout/', LogoutView.as_view(), name='user-logout'),
 ]
 
 router = SimpleRouter()

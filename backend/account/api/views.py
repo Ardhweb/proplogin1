@@ -79,4 +79,14 @@ class LoginView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
     
+    def post(self, request):
+        try:
+            request.user.auth_token.delete()
+        except:
+            pass
+        return Response({"detail": "Successfully logged out."})

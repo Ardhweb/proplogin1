@@ -34,7 +34,7 @@ export const AddForm = ({ show, handleClose,onSuccess }) => {
       const data = await response.json();
 
       if (response.ok) {
-        console.log(data);
+        // console.log(data);
         alert("Firm registered successfully!");
          if (onSuccess) onSuccess();
       } else {

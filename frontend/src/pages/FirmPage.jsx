@@ -2,11 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AddForm } from "../components/FirmForm";
 import { Button } from "react-bootstrap";
+import { EditForm } from "../components/EditFirmForm";
 
 function Firm() {
   const [showModal, setShowModal] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
   const [firmData, setfirmData] = useState([]);
   const [error, setError] = useState(null);
+  const [selectedFirmId, setSelectedFirmId] = useState(null);
+
   const authRaw = localStorage.getItem("auth");
   if (!authRaw) {
     setError("User not authenticated");
@@ -85,6 +89,17 @@ function Firm() {
         handleClose={() => setShowModal(false)}
         onSuccess={fetchFirms}
       />
+
+
+     <EditForm
+  show={showEdit}
+  handleClose={() => setShowEdit(false)}
+  firmData={firmData}
+  selectedId={selectedFirmId}
+  onSuccess={fetchFirms}
+/>
+
+
       {error && <div className="alert alert-danger">{error}</div>}
 
       {firmData.length === 0 && !error && <p>No firm data available.</p>}
@@ -95,6 +110,16 @@ function Firm() {
               <div className="card-body">
                 <h5 className="card-title">
                   {firm.firm_name}{" "}
+                <Button
+  variant="primary"
+  onClick={() => {
+    setSelectedFirmId(firm.id);
+    setShowEdit(true);
+  }}
+>
+  Edit
+</Button>
+
                   <Button
                     onClick={deleteFirm}
                     value={firm.id}
