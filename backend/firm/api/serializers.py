@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from firm.models import Organization
 from account.api.serializers import UserSerializer
+
 class OrganizationSerializer(serializers.ModelSerializer):
     user  = UserSerializer(read_only=True)
 

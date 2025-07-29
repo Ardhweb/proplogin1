@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import Signup from "./pages/SignupPage";
 import Login from "./pages/LoginPage";
 import Home from "./pages/Home";
@@ -7,18 +7,29 @@ import OtherLayout from "./layouts/OtherLayout";
 import PublicLayout from "./layouts/PublicLayout";
 const Missing = () => <h2>404 - Page Not Found</h2>; // Quick placeholder
 
-export function ProtectedRoute({ children }) {
-  const auth = JSON.parse(localStorage.getItem("auth"));
-  const isAuthenticated = auth?.user != null;
+export function isAuthenticated() {
+  const authRaw = localStorage.getItem("auth");
+  if (!authRaw) return false;
 
-  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+  try {
+    const auth = JSON.parse(authRaw);
+    return !!auth?.token && !!auth?.user;
+  } catch {
+    return false;
+  }
 }
 
+export function ProtectedRoute({ children }) {
+  if (!isAuthenticated()) {
+    return <Navigate to="/login" />;
+  }
+  // return <>{children}</>;
+  return <Outlet />;
+}
 
 export const Routing = () => {
   return (
     <Routes>
-
       <Route element={<OtherLayout />}>
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
@@ -26,18 +37,15 @@ export const Routing = () => {
 
       {/* Public Home with Layout (from App) */}
       <Route element={<PublicLayout />}>
-        <Route path="/" element={<Home />} /> 
+        <Route path="/" element={<Home />} />
       </Route>
 
-       {/* Proteacted Routes */}
+      {/* Proteacted Routes */}
       <Route element={<ProtectedRoute />}>
         <Route path="/myfirm" element={<Firm />} />
       </Route>
 
-      
-
       <Route path="*" element={<Missing />} />
-
     </Routes>
   );
 };

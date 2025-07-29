@@ -37,7 +37,7 @@ function LoginForm() {
 
       if (response.ok) {
         //alert('Data submitted successfully!');
-        //console.log(data);
+        console.log(data);
         localStorage.setItem(
           "auth",
           JSON.stringify({

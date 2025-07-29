@@ -68,11 +68,15 @@ class LoginView(APIView):
     serializer_class = LoginSerializer
 
     def post(self, request):
-        user = authenticate(username=request.data['username'], password=request.data['password'])
-        if user:
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({"message":"Authentication Successfully", "username":user.username,"email":user.email,'token': token.key},status=status.HTTP_200_OK)
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user = authenticate(username=request.data['username'], password=request.data['password'])
+            if user:
+                token, created = Token.objects.get_or_create(user=user)
+                return Response({"message":"Authentication Successfully","user":serializer.data,'token': token.key},status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid credentials'}, status=401)
         else:
-            return Response({'error': 'Invalid credentials'}, status=401)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     

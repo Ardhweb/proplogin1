@@ -12,18 +12,14 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated]
     authentication_classes = (TokenAuthentication,)
 
-    def list(self,request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        if request.user.is_authenticated:
-            obj = Organization.objects.filter(user=request.user)
-            serializer = self.get_serializer(obj, many=True)
-            return Response({"data": serializer.data}, status=status.HTTP_200_OK)
-        else:
-            return Response(
-                {"error": "Authentication required to get firm list associted with you."},
-                status=status.HTTP_401_UNAUTHORIZED
-            )
+    def get_queryset(self):
+        
+        return Organization.objects.filter(user=self.request.user)
+
+    def list(self, request):
+        queryset = self.get_queryset() 
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
         
     def retrieve(self, request, *args, **kwargs):
             try:
