@@ -38,7 +38,9 @@ Here's a cleaned-up and polished version of your text with improved grammar, spe
         
     *   pip install -r requirements.txt
         
-    *   python manage.py makemigrationspython manage.py migrate
+    *   python manage.py makemigrations
+    *
+    *   python manage.py migrate
         
     *   python manage.py runserver
         
