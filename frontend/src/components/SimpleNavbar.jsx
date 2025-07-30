@@ -75,9 +75,11 @@ const SimpleNavbar = () => {
               Sign Out
             </Button>
           ) : (
-            <Button variant="outline-primary" onClick={() => navigate('/login')}>
-              Login
-            </Button>
+            <><Button variant="outline-primary" onClick={() => navigate('/login')}>
+                Login
+              </Button><Button variant="outline-primary" onClick={() => navigate('/signup')}>
+                  Signup
+                </Button></>
           )}
         </Navbar.Collapse>
       </Container>
