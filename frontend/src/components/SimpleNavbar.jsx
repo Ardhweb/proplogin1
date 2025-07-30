@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Button from 'react-bootstrap/Button';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,Link} from 'react-router-dom';
 
 const SimpleNavbar = () => {
   const navigate = useNavigate();
@@ -50,14 +50,25 @@ const SimpleNavbar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
             <Nav.Link href="/">Home</Nav.Link>
-            <Nav.Link href="/about">About</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/action1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="/action2">Another action</NavDropdown.Item>
-              <NavDropdown.Item href="/something">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="/more">Separated link</NavDropdown.Item>
-            </NavDropdown>
+               
+           
+
+
+                 {/* Auth condition */}
+          {isAuthenticated ? (
+            <><Nav.Link href="/myprofile">User Profile</Nav.Link><NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                <NavDropdown.Item href="/myfirm">Register Organization/Firm</NavDropdown.Item>
+                <NavDropdown.Item href="/action2">Another action</NavDropdown.Item>
+                <NavDropdown.Item href="/something">Something</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="/more">Separated link</NavDropdown.Item>
+              </NavDropdown></>
+              
+
+          ) : (
+            <></>
+          )}
+
           </Nav>
 
           {/* Auth condition */}

@@ -30,9 +30,8 @@ class UserDetailView(APIView):
     authentication_classes = (TokenAuthentication, )
     serializer_class = UserSerializer
     
-    def get(self, request, pk):
-        user = get_object_or_404(User, pk=pk)
-        serializer = self.serializer_class(user)
+    def get(self, request):
+        serializer = self.serializer_class(request.user)
         return Response(serializer.data)
 
     def put(self, request, pk):

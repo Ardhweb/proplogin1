@@ -5,6 +5,7 @@ from rest_framework.routers import SimpleRouter
 
 urlpatterns = [
     path('user/register/',UserRegisterView.as_view(),name="user-register"),
+    path('user/', UserDetailView.as_view(), name='user-info'),
     path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path('login/',LoginView.as_view(),name="user-login"),
     path('logout/', LogoutView.as_view(), name='user-logout'),

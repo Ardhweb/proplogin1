@@ -3,6 +3,7 @@ import Signup from "./pages/SignupPage";
 import Login from "./pages/LoginPage";
 import Home from "./pages/Home";
 import Firm from "./pages/FirmPage";
+import Profile from "./pages/PofilePage";
 import OtherLayout from "./layouts/OtherLayout";
 import PublicLayout from "./layouts/PublicLayout";
 const Missing = () => <h2>404 - Page Not Found</h2>; // Quick placeholder
@@ -49,6 +50,7 @@ export const Routing = () => {
         {/* Inside ProtectedRoute, add layout for protected pages */}
         <Route element={<PublicLayout />}>
           <Route path="/myfirm" element={<Firm />} />
+           <Route path="/myprofile" element={<Profile />} />
           {/* Add more protected routes here */}
         </Route>
       </Route>
