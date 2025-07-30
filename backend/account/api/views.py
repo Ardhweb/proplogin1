@@ -1,5 +1,5 @@
 from rest_framework.permissions import AllowAny,IsAuthenticated
-from account.api.serializers import UserSerializer,LoginSerializer
+from account.api.serializers import UserSerializer,LoginSerializer,UserUpdateSerializer
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from rest_framework.response import Response
@@ -28,7 +28,7 @@ class UserRegisterView(APIView):
 class UserDetailView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = (TokenAuthentication, )
-    serializer_class = UserSerializer
+    serializer_class = UserUpdateSerializer
     
     def get(self, request):
         serializer = self.serializer_class(request.user)

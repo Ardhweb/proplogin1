@@ -54,12 +54,10 @@ const SimpleNavbar = () => {
            
 
 
-                 {/* Auth condition */}
+                
           {isAuthenticated ? (
             <><Nav.Link href="/myprofile">User Profile</Nav.Link><NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown.Item href="/myfirm">Register Organization/Firm</NavDropdown.Item>
-                <NavDropdown.Item href="/action2">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="/something">Something</NavDropdown.Item>
                 <NavDropdown.Divider />
                 <NavDropdown.Item href="/more">Separated link</NavDropdown.Item>
               </NavDropdown></>
